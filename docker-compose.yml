@@ -1,0 +1,63 @@
+version: '3.7'
+services:
+
+  # REDIS
+  redis:
+    image: redis:latest
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6382:6379"
+    networks:
+      - backend
+
+  # MYSQL
+  mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_DATABASE=default
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=UTC
+    volumes:
+      - mysql-db-data:/var/lib/mysql:rw
+    ports:
+      - '3310:3306'
+    networks:
+      - backend
+
+  # PHP APP (PHP + NGINX)
+  php:
+    build:
+      context: .
+    image: pt-api:latest
+    working_dir: /var/www
+    depends_on:
+      - redis
+      - mysql
+    links:
+      - redis
+      - mysql
+    networks:
+      - backend
+    ports:
+      - '8181:80'
+    environment:
+        WEB_DOCUMENT_ROOT: '/var/www/public'
+        WEB_DOCUMENT_INDEX: index.php
+    volumes:
+      - .:/var/www:rw,cached
+      - ./nginx/app.conf:/opt/docker/etc/nginx/conf.d/app.conf
+
+# Volumes
+volumes:
+  mysql-db-data:
+    name: pt-mysql-db-data
+  redis-data:
+    name: pt-redis-data
+
+# Network
+networks:
+  backend:
+    driver: bridge
+    name: pt-backend
