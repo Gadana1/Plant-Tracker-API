@@ -31,7 +31,7 @@ class PlantController extends Controller
     }
 
     /**
-     * Get list
+     * Create record
      *
      * @return \Illuminate\Http\JsonResponse
      */

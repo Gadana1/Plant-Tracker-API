@@ -24,6 +24,11 @@ ENV PUID ${PUID}
 # Add user and group
 RUN addgroup -g ${PGID} -S laravel && adduser -u ${PUID} -S laravel  -G laravel
 
+
+# Copy instalation files from your file system to container file system
+COPY composer.json ./
+COPY composer.lock ./
+
 # Clean up
 RUN rm -rf /tmp/* /var/tmp/* && \
     rm -rf /var/log/lastlog /var/log/faillog

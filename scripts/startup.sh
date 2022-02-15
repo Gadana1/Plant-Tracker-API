@@ -3,6 +3,9 @@
 # exit when any command fails
 set -e
 
+# Install dependencies
+composer install
+
 # Perform after install function
 echo 'Running after install script'
 /var/www/scripts/after_install.sh
