@@ -32,9 +32,9 @@ COPY composer.lock ./
 # Clean up
 RUN rm -rf /tmp/* /var/tmp/* && \
     rm -rf /var/log/lastlog /var/log/faillog
-    
-# Switch to non-root user -prevent starting docker as root
+     
+# # Switch to non-root user -prevent starting docker as root
 # USER laravel
- 
+
 # Start up script
-CMD ./scripts/startup.sh
+CMD [ "./scripts/startup.sh" ] 

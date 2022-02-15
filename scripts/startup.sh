@@ -4,6 +4,7 @@
 set -e
 
 # Install dependencies
+echo 'Installing dependencies'
 composer install
 
 # Perform after install function

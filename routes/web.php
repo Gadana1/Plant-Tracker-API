@@ -19,6 +19,6 @@ Route::get('/', function () {
 
 
 Route::get('/uploads/{search}', function($search) {
-    $search = strip_tags($search);
+    $search = trim(strip_tags($search), "<>$#&*\n\t!()?^@|");
     return response()->download(storage_path("app/public/uploads/$search"));
 })->where('search', '.*');
