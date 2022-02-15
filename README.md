@@ -13,6 +13,6 @@ This is a Laravel application.
 - Set up Environment Variables
   - Ensure `.env` file exists. If not, copy `.env.example` to `.env`
   - Ensure `.env` file is populated with the correct details
-- Start Local Server (Wecari API)
+- Start Local Server
   - Run `docker-compose up`. This will start the docker and set up the server using the predefined scripts in `/scripts`
   
