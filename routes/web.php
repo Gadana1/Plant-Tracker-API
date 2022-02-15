@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/uploads/{search}', function($search) {
+    $search = strip_tags($search);
+    return response()->download(storage_path("app/public/uploads/$search"));
+})->where('search', '.*');
