@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\Cachable;
+use App\Traits\CachableInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 
@@ -31,9 +33,10 @@ use Illuminate\Database\Eloquent\Model as BaseModel;
  * @method static \Illuminate\Database\Eloquent\Builder|static query()
  * @method static \Illuminate\Database\Eloquent\Builder where($column, $operator = null, $value = null, $boolean = 'and')
  */
-class Model extends BaseModel
+abstract class Model extends BaseModel implements CachableInterface
 {
     use HasFactory;
+    use Cachable;
 
     /**
      * Create a new Eloquent model instance.
@@ -45,5 +48,21 @@ class Model extends BaseModel
     {
         parent::__construct($attributes);
         $this->perPage = config('app.pagination_count');
+    }
+
+    /**
+     * Get the value of cacheTTL
+     */
+    public static function getCacheTTL(): int
+    {
+        return (int) config('app.cache.ttl');
+    }
+
+    /**
+     * Get the value of cacheEnabled - If model caching enabled
+     */
+    public static function getCacheEnabled(): bool
+    {
+        return boolval(config('app.cache.model', false));
     }
 }

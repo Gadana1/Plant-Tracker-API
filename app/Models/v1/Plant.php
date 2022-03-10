@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Plant
- * 
+ *
  * @property int $id
  * @property string $name
  * @property string $species
@@ -29,7 +29,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Plant extends Model
 {
 	use SoftDeletes;
-	use Cachable;
 
 	protected $table = 'plants';
 	protected $perPage = 20;

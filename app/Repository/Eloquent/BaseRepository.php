@@ -16,7 +16,6 @@ class BaseRepository implements BaseRepositoryInterface
      * @var Model
      */
     protected $model;
-    protected $cachingAllowed = false;
     protected $cacheTags = [];
 
     /**
@@ -25,15 +24,16 @@ class BaseRepository implements BaseRepositoryInterface
     public function __construct(Model $model)
     {
         $this->model = $model;
-        $this->cachingAllowed = Utils::hasTrait(Cachable::class, static::class);
     }
-    
+
     /**
      * @param Model $model
+     * @return self
      */
     public function setCacheTags(array $cacheTags)
     {
         $this->cacheTags = $cacheTags;
+        return $this;
     }
 
     /**
@@ -82,7 +82,11 @@ class BaseRepository implements BaseRepositoryInterface
         array $relations = [],
         array $appends = []
     ): ?Model {
-        return $this->model->select($columns)->with($relations)->findOrFail($modelId)->append($appends);
+        $query = fn() => $this->model->select($columns)->with($relations)->findOrFail($modelId)->append($appends);
+        if ($this->model->isCacheEnabled()) {
+            return Model::rememberItem(array_merge($this->cacheTags, [Model::getCacheTag(), Model::getItemCacheTag($modelId)]), $query);
+        }
+        return $query();
     }
 
     /**

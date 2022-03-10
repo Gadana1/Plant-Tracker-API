@@ -38,6 +38,5 @@ class PlantRepository extends BaseRepository implements PlantRepositoryInterface
             return $builder->oldest()->simplePaginate($limit ?: $this->model->perPage, $columns);
         }
         return $this->model->with($relations)->latest()->simplePaginate($limit ?: $this->model->perPage, $columns);
-
     }
 }
