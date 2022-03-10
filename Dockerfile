@@ -8,33 +8,19 @@ RUN set -xe; \
     apk update && \
     apk add --no-cache supervisor && \
     apk add --no-cache unzip && \
-    apk add --no-cache mysql mysql-client
-
-
-###########################################################################
-# Add non-root user - 'Laravel':
-###########################################################################
-
-# Add a non-root user to prevent files being created with root permissions on host machine.
-ARG PGID=1010
-ENV PGID ${PGID}
-ARG PUID=1010
-ENV PUID ${PUID}
-
-# Add user and group
-RUN addgroup -g ${PGID} -S laravel && adduser -u ${PUID} -S laravel  -G laravel
-
+    apk add --no-cache mysql mysql-client && \
+    apk add --no-cache rsync
 
 # Copy instalation files from your file system to container file system
-COPY composer.json ./
-COPY composer.lock ./
+ADD composer.json ./
+ADD composer.lock ./
 
 # Clean up
 RUN rm -rf /tmp/* /var/tmp/* && \
     rm -rf /var/log/lastlog /var/log/faillog
-     
-# # Switch to non-root user -prevent starting docker as root
-# USER laravel
+
+# Switch to non-root user - prevent starting docker as root (APPLICATION_USER env is supplied by image)
+USER ${APPLICATION_USER}
 
 # Start up script
-CMD [ "./scripts/startup.sh" ] 
+CMD [ "./scripts/startup.sh" ]

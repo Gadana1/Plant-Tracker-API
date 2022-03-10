@@ -4,6 +4,9 @@
 # exit when any command fails
 set -e
 
+echo Create .env file - no overwrite
+rsync -a -v --ignore-existing .env.example .env
+
 echo Generate Laravel APP Key
 php /var/www/artisan key:generate -q
 
